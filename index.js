@@ -67,10 +67,10 @@ async function abrirPuerta() {
     }
 }
 
-async function enviarNotificacion(token, message) {
+async function enviarNotificacion(title, token, message) {
     if (rabbitChannel) {
         const notification = {
-            title: "Notificación de Puerta/Alarma",
+            title: title,
             body: message,
             token: token
         };
@@ -110,11 +110,11 @@ app.post("/compare", async (req, res) => {
         if (match) {
             console.log("✅ Rostro válido. Abriendo puerta...");
             abrirPuerta();
-            enviarNotificacion(token, "Puerta abierta");
+            enviarNotificacion("Puerta abierta", token, "La puerta ha sido abierta.");
         } else {
             console.log("❌ Rostro no reconocido. Activando alarma...");
             activarAlarma();
-            enviarNotificacion(token, "Alarma activada");
+            enviarNotificacion("Alarma activada", token, "La alarma ha sido activada.");
         }
 
         return res.json({ match, similarity });
