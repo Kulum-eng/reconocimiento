@@ -69,9 +69,14 @@ async function abrirPuerta() {
 
 async function enviarNotificacion(token, message) {
     if (rabbitChannel) {
-        const msg = JSON.stringify({ token, message });
+        const notification = {
+            title: "Notificación de Puerta/Alarma",
+            body: message,
+            token: token
+        };
+        const msg = JSON.stringify(notification);
         rabbitChannel.sendToQueue(NOTIFICATION_QUEUE, Buffer.from(msg));
-        console.log('📨 Notificación enviada a RabbitMQ:', { token, message });
+        console.log('📨 Notificación enviada a RabbitMQ:', notification);
     } else {
         console.error('❌ Canal RabbitMQ no disponible');
     }
